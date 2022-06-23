@@ -7,7 +7,7 @@
             {% csrf_token %}
             <div>
                 <label for="grade-data">选择文件</label>
-                <input style="display: block;background: #5b80b2" type="file" name="grade-data" id="select-file" accept="application/vnd.ms-excel,text/csv">
+                <input style="display: block;background: #5b80b2" type="file" name="grade-data" id="select-file" accept=".xlsx,text/csv">
             </div>
             <div class="check_info">
                 <p>还未选择文件</p>
@@ -39,7 +39,7 @@
                         }
                     }
                 }
-                const fileTypes = ['text/csv','application/vnd.ms-excel']
+                const fileTypes = ['text/csv','.xlsx','.xls']
                 function validFileType(file){
                     return fileTypes.includes(file.type);
                 }

@@ -335,23 +335,29 @@ class CourseView(View):
 def importGrade(request):
     return render(request, "admin/app/csv_form.html")
 
+
 ##文件处理
 from django.conf import settings
-from tool import fileTool
+
+import os
+import sys
+
+# 获取当前代码文件绝对路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# 将需要导入模块代码文件相对于当前文件目录的绝对路径加入到sys.path中
+sys.path.append(os.path.join(current_dir, "./"))
+
+from filetool.filetool import FileUtil
+
+
+### 输入的文件要严格按照格式,否则出问题
 def upload(request):
-    if(request.method == "POST"):
-        myfile = request.FILES.get('grade-data',None)
-        handle = fileTool.FileUtil(myfile)
-        handle.dealCsv()
-        try:
-            suffix = str(myfile.name).split('.')[-1]
-            times = str(time.time()).split('.').pop()
-            fil = str(myfile.name.split('.')[0])
-            filename = times+"_"+fil+'.'+suffix
-            filename_dir = settings.MEDIA_ROOT
-            with open(filename_dir+filename,'wb+') as f:
-                for chunk in myfile.chunks():
-                    f.write(chunk)
-                f.close()
-        except:
-            return HttpResponse("提交失败")
+    if request.method == "POST":
+
+
+            myfile = request.FILES.get('grade-data', None)
+            text = myfile.read()
+            handle = FileUtil(text)
+            handle.dealExcel()
+        # except:
+        #     return HttpResponse("提交失败")
