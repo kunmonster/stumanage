@@ -1,0 +1,61 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+    <div>
+        <form action="{% url 'upload' %}" method="POST" enctype="multipart/form-data">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <div>
+                <label for="grade-data">选择文件</label>
+                <input style="display: block;background: #5b80b2" type="file" name="grade-data" id="select-file" accept="application/vnd.ms-excel,text/csv">
+            </div>
+            <div class="check_info">
+                <p>还未选择文件</p>
+            </div>
+            <script>
+                const input = document.getElementById("select-file");
+                const check_info = document.querySelector('.check_info')
+                input.style.opacity = 0;
+                input.addEventListener('change',changeInfo);
+                function changeInfo(){
+                    while (check_info.firstChild){
+                        check_info.removeChild(check_info.firstChild);
+                    }
+                    const currentFile = input.files;
+                    if(currentFile.length === 0){
+                          const para = document.createElement('p');
+                        para.textContent = '还未选择文件';
+                        check_info.appendChild(para);
+                    }
+                    else {
+                        //已经选择文件了
+                        for (const file of currentFile){
+                            const para = document.createElement('p');
+                            if(validFileType(file)){
+                                //文件类型正确
+                                para.textContent=`已选择文件:${file.name},文件大小为:${returnFileSize(file.size)}`;
+                                check_info.appendChild(para)
+                            }
+                        }
+                    }
+                }
+                const fileTypes = ['text/csv','application/vnd.ms-excel']
+                function validFileType(file){
+                    return fileTypes.includes(file.type);
+                }
+                function returnFileSize(number) {
+                if(number < 1024) {
+                     return number + 'bytes';
+                } else if(number >= 1024 && number < 1048576) {
+                 return (number/1024).toFixed(1) + 'KB';
+                } else if(number >= 1048576) {
+                return (number/1048576).toFixed(1) + 'MB';
+                }
+                }
+            </script>
+                <button type="submit">上传</button>
+        </form>
+    </div>
+    <br />
+
+{% endblock %}
