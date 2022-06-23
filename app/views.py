@@ -353,11 +353,17 @@ from filetool.filetool import FileUtil
 ### 输入的文件要严格按照格式,否则出问题
 def upload(request):
     if request.method == "POST":
-
-
-            myfile = request.FILES.get('grade-data', None)
-            text = myfile.read()
-            handle = FileUtil(text)
-            handle.dealExcel()
-        # except:
-        #     return HttpResponse("提交失败")
+        myfile = request.FILES.get('grade-data', None)
+        text = myfile.read()
+        handle = FileUtil(text)
+        rtn = handle.dealExcel()
+        if rtn == 0:
+            return HttpResponse("<script>alert('提交成功');</script>")
+        elif rtn == -1:
+            return HttpResponse("<script>alert('数据不正确或者无数据');</script>")
+        elif rtn == -2 | rtn == -3:
+            HttpResponse("<html><script>alert('数据表格式错误');window.location.go(-1);</script></html>")
+        else:
+            HttpResponse("<html><script>alert('提交失败')window.location.go(-1);</script></html>")
+    # except:
+    #     return HttpResponse("提交失败")
