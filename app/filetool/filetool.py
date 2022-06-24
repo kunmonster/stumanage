@@ -39,16 +39,20 @@ class FileUtil:
             grade = table.row_values(j)[3]
             # make_up_sign = table.row_values(j)[4]
             # re_test_sign = table.row_values(j)[5]
-            grade_info_list.append(Grade(
-                user_name_id=str(stu_id),
-                course_id_id=course_id,
-                grade_value=grade,
-                grade_complain=""
-            ))
+            try:
+                grade_info_list.append(Grade(
+                    user_name_id=str(stu_id),
+                    course_id_id=course_id,
+                    grade_value=grade,
+                    grade_complain=None
+                ))
+            except DoesNotExist:
+                print("用户不存在")
         try:
             Grade.objects.bulk_create(grade_info_list)
-        except:
-            return
+        except e:
+            e.prinStact()
+            return -4
         # for i in range(1, row):
         #     col = table.row_values(i)
         #     print(col)

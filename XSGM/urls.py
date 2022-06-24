@@ -31,6 +31,6 @@ urlpatterns = [
     path('importGrade', views.importGrade, name="import-grade"),
     path('upload/', views.upload, name="upload"),
     path('download/', views.download_file, name="download"),
-    url(r'^captcha/', include('captcha.urls')),
+    # url(r'^captcha/', include('captcha.urls')),
     url(r'^static/(?P<path>.*)$', serve, {"document_root": STATIC_ROOT}),
 ]

@@ -362,7 +362,7 @@ def upload(request):
         elif rtn == -2 | rtn == -3:
             HttpResponse("<html><script>alert('数据表格式错误');window.location.go(-1);</script></html>")
         else:
-            HttpResponse("<html><script>alert('提交失败')window.location.go(-1);</script></html>")
+            return JsonResponse({"msg": "error"}, safe=False, json_dumps_params={'ensure_ascii': False})
 
 
 from django.http import StreamingHttpResponse

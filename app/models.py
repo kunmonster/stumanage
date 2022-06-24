@@ -42,8 +42,8 @@ class Course(BaseModel):
 
 
 class Grade(BaseModel):
-    user_name = models.ForeignKey('User',verbose_name="学号", on_delete=models.CASCADE,limit_choices_to={'user_id':u'学生'})
-    course_id = models.ForeignKey('Course',verbose_name="课程id",on_delete=models.CASCADE)
+    user_name = models.ForeignKey('User',verbose_name="姓名", on_delete=models.CASCADE,limit_choices_to={'user_id':u'学生'})
+    course_id = models.ForeignKey('Course',verbose_name="课程名",on_delete=models.CASCADE)
     grade_value = models.DecimalField(verbose_name="成绩", max_digits=5, decimal_places=2)
     grade_complain = models.CharField(verbose_name="成绩申诉", max_length=300,null=True,blank=True)
     class Meta:
