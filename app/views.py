@@ -1,6 +1,7 @@
 import json
 import time
 
+from django.contrib import messages
 from django.core import serializers
 from django.forms import model_to_dict
 from django.http import JsonResponse, HttpRequest, HttpResponse
@@ -356,13 +357,17 @@ def upload(request):
         handle = FileUtil(text)
         rtn = handle.dealExcel()
         if rtn == 0:
-            return HttpResponse("<script>alert('提交成功');</script>")
+            messages.success(request,'提交成功')
+            return render(request,'result.html',{})
         elif rtn == -1:
-            return JsonResponse({"msg": "error"}, safe=False, json_dumps_params={'ensure_ascii': False})
+            messages.error(request,'数据表为空或者没有有效数据')
+            return render(request,'result.html',{})
         elif rtn == -2 | rtn == -3:
-            HttpResponse("<html><script>alert('数据表格式错误');window.location.go(-1);</script></html>")
+            messages.error(request, '数据表格式错误')
+            return render(request, 'result.html', {})
         else:
-            return JsonResponse({"msg": "error"}, safe=False, json_dumps_params={'ensure_ascii': False})
+            messages.error(request, '未知异常,请检查文件后重试')
+            return render(request, 'result.html', {})
 
 
 from django.http import StreamingHttpResponse

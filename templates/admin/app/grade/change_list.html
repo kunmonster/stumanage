@@ -88,7 +88,7 @@
             <form id="changelist-form" method="post" {% if cl.formset.is_multipart %}
                   enctype="multipart/form-data" {% endif %} novalidate>{% csrf_token %}
                 <!--Compatible with django 3.2 x-->
-{#            <div style="padding: 10px;margin-bottom: 10px"><a href="{%  url 'import-grade' %}" class="addlink">导入</a></div>#}
+                {#            <div style="padding: 10px;margin-bottom: 10px"><a href="{%  url 'import-grade' %}" class="addlink">导入</a></div>#}
                 <button style="display:none" name="index"></button>
                 {% if cl.formset %}
                     <div>{{ cl.formset.management_form }}</div>
@@ -114,8 +114,8 @@
                 url: $(this).attr('href')
             })
         })
-        if(parent.addEvent){
-            parent.addEvent('title','{% get_verbose_name_plural %}')
+        if (parent.addEvent) {
+            parent.addEvent('title', '{% get_verbose_name_plural %}')
         }
     </script>
 {% endblock %}

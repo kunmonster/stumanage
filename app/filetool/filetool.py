@@ -16,7 +16,7 @@ class FileUtil:
         table_head = ['学号', '姓名', '课程id', '成绩', '补考标记', '缓考标记', '重修标记']
         if row <= 1:
             '''当excel中只有一行或者小于一行时候'''
-            return -1;
+            return -1
         else:
             '''判断表头是否与规定表头完全一样'''
             col = table.row_values(0)
@@ -46,16 +46,10 @@ class FileUtil:
                     grade_value=grade,
                     grade_complain=None
                 ))
-            except DoesNotExist:
-                print("用户不存在")
-        try:
-            Grade.objects.bulk_create(grade_info_list)
-        except e:
-            e.prinStact()
-            return -4
-        # for i in range(1, row):
-        #     col = table.row_values(i)
-        #     print(col)
+            except Grade.objectsDoesNotExist:
+                return -4
+        if not Grade.objects.bulk_create(grade_info_list):
+            return -5
         return 0
 
     def dealCsv(self):
