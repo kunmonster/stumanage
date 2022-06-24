@@ -36,7 +36,7 @@ ALLOWED_HOSTS = ['*']
 
 # 文件上传路径
 
-MEDIA_ROOT = os.path.join(BASE_DIR,"media\\")
+MEDIA_ROOT = os.path.join(BASE_DIR,"UserFile\\")
 
 # Application definition
 

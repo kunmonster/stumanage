@@ -19,7 +19,7 @@ from django.urls import path, include
 from django.views.static import serve
 
 from XSGM.settings import STATIC_ROOT
-from  app import  views
+from app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,8 +28,9 @@ urlpatterns = [
     path('grade/', views.GradeView.as_view(), name='grade'),
     path('message/', views.MessageView.as_view(), name="message"),
     path('course/', views.CourseView.as_view(), name="course"),
-    path('importGrade',views.importGrade,name="import-grade"),
-    path('upload/',views.upload,name="upload"),
+    path('importGrade', views.importGrade, name="import-grade"),
+    path('upload/', views.upload, name="upload"),
+    path('download/', views.download_file, name="download"),
     url(r'^captcha/', include('captcha.urls')),
     url(r'^static/(?P<path>.*)$', serve, {"document_root": STATIC_ROOT}),
 ]

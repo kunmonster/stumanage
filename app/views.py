@@ -5,6 +5,15 @@ from django.core import serializers
 from django.forms import model_to_dict
 from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.conf import settings
+import os
+import sys
+
+# 获取当前代码文件绝对路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# 将需要导入模块代码文件相对于当前文件目录的绝对路径加入到sys.path中
+sys.path.append(os.path.join(current_dir, "./"))
+from filetool.filetool import FileUtil
 
 # Create your views here.
 from django.views import View
@@ -15,7 +24,6 @@ from app.models import User, Grade, Message, Course
 class IndexView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'index.html', {
-
         })
 
 
@@ -331,26 +339,16 @@ class CourseView(View):
         return JsonResponse(data, safe=False, json_dumps_params={'ensure_ascii': False})
 
 
-###csv选择页面
+# 文件选择页面
 def importGrade(request):
     return render(request, "admin/app/csv_form.html")
 
 
-##文件处理
-from django.conf import settings
-
-import os
-import sys
-
-# 获取当前代码文件绝对路径
-current_dir = os.path.dirname(os.path.abspath(__file__))
-# 将需要导入模块代码文件相对于当前文件目录的绝对路径加入到sys.path中
-sys.path.append(os.path.join(current_dir, "./"))
-
-from filetool.filetool import FileUtil
+# =============文件处理================ #
+# ===上传的文件要严格按照格式,否则出问题==== #
+# =======添加一个模板文件的下载接口=======  #
 
 
-### 输入的文件要严格按照格式,否则出问题
 def upload(request):
     if request.method == "POST":
         myfile = request.FILES.get('grade-data', None)
@@ -360,10 +358,21 @@ def upload(request):
         if rtn == 0:
             return HttpResponse("<script>alert('提交成功');</script>")
         elif rtn == -1:
-            return HttpResponse("<script>alert('数据不正确或者无数据');</script>")
+            return JsonResponse({"msg": "error"}, safe=False, json_dumps_params={'ensure_ascii': False})
         elif rtn == -2 | rtn == -3:
             HttpResponse("<html><script>alert('数据表格式错误');window.location.go(-1);</script></html>")
         else:
             HttpResponse("<html><script>alert('提交失败')window.location.go(-1);</script></html>")
-    # except:
-    #     return HttpResponse("提交失败")
+
+
+from django.http import StreamingHttpResponse
+from filetool import slice_file
+
+
+# =======下载模板文件========= #
+def download_file(request):
+    file_path = settings.MEDIA_ROOT + "template.xls"
+    response = StreamingHttpResponse(slice_file.down_chunk_file_manager(file_path))
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="template.xls"'.format(file_path)
+    return response

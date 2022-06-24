@@ -6,19 +6,34 @@
         {{ form.as_p }}
         {% csrf_token %}
         <div>
-            <label for="select-file" style="background: aqua;width: 40px;height: 20px">点击选择文件</label>
-            <input style="display: block;background: #5b80b2" type="file" name="grade-data" id="select-file"
+            <a style="display:block;margin-bottom: 10px" href="{% url 'download' %}">下载导入文件模板</a>
+            <label for="select-file"
+                   style="background-color: #79aec8;width: 40px;height: 30px;border:1px white;border-radius: 2px">点击选择文件</label>
+            <input type="file" name="grade-data" id="select-file"
                    accept=".xlsx,text/csv,application/vnd.ms-excel">
         </div>
         <div class="check_info">
             <p>还未选择文件</p>
         </div>
         <script>
+            <!--接受excel(.xls,.csv,.xlsx)-->
             const fileTypes = ['text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel']
             const input = document.getElementById("select-file");
             const check_info = document.querySelector('.check_info')
             input.style.opacity = 0;
             input.addEventListener('change', changeInfo);
+            const submit = document.getElementById("submit-up");
+
+            function checkForm() {
+                const file = document.getElementById("select-file");
+                const input_file = file.files;
+                if (input_file === undefined || input_file.length === 0) {
+                    alert("当前未选择文件!")
+                    return false;
+                } else {
+                    return true;
+                }
+            }
 
             function changeInfo() {
                 while (check_info.firstChild) {
@@ -41,6 +56,7 @@
                     }
                 }
             }
+
             function validFileType(file) {
                 return fileTypes.includes(file.type);
             }
@@ -55,7 +71,9 @@
                 }
             }
         </script>
-        <button type="submit">上传</button>
+        <button style="display: block;margin-top:20px;width: 80px;height: 25px;background: #b0ff15;border-radius: 3px;border:1px white;text-align: center"
+                type="submit" id="submit-up" onclick="return checkForm()">点击上传
+        </button>
     </form>
 </div>
 <br/>
